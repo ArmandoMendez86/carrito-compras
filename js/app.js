@@ -60,6 +60,7 @@ function leerCurso(curso) {
 
   carritoHtml();
   numeroArticulos();
+  calcularTotal();
 }
 
 function carritoHtml() {
@@ -95,22 +96,27 @@ function mostrarOcultarCarrito() {
 
 function eliminarCurso(e) {
   if (e.target.classList.contains("borrar-curso")) {
-    let idCurso = e.target.getAttribute("data-id");
+    let idCurso = parseInt(e.target.getAttribute("data-id"));
     let curso = e.target.closest("tr");
-    let cantidad = curso.querySelectorAll("td")[3].textContent;
+    let cantidad = parseInt(curso.querySelectorAll("td")[3].textContent);
 
     if (cantidad > 1) {
       articulosCarrito = articulosCarrito.map((curso) => {
-        return { ...curso, cantidad: curso.cantidad - 1 };
+        if (curso.id == idCurso) {
+          return { ...curso, cantidad: curso.cantidad - 1 };
+        } else {
+          return curso;
+        }
       });
     } else {
       articulosCarrito = articulosCarrito.filter(
-        (curso) => curso.id !== idCurso
+        (curso) => curso.id != idCurso
       );
     }
 
     carritoHtml();
-    numeroArticulos()
+    numeroArticulos();
+    calcularTotal();
   }
 }
 
@@ -119,4 +125,13 @@ function vaciarCarrito() {
   carritoHtml();
   numeroArticulos();
   mostrarOcultarCarrito();
+}
+
+function calcularTotal() {
+  let total = articulosCarrito.reduce(
+    (total, item) =>
+      parseFloat(total) + parseFloat(item.precio) * parseFloat(item.cantidad),
+    0
+  );
+  document.querySelector("#montoTotal").textContent = `$${total.toFixed(2)}`;
 }
