@@ -48,14 +48,18 @@ ul {
     position: relative;
 }
 
-.submenu #carrito{
+#img-carrito{
+    cursor: pointer;
+}
+
+
+.ocultarCarrito{
     display: none;
 }
-.submenu:hover #carrito{
+.mostrarCarrito{
     display: block;
     position: absolute;
     right:0;
-
     top:100%;
     z-index: 1;
     background-color: white;
@@ -63,6 +67,7 @@ ul {
     min-height: 400px;
     min-width: 300px;
 }
+
 .vacio {
     padding: 10px;
     background-color: crimson;
@@ -179,4 +184,19 @@ ul {
 display: block;
 margin-bottom: 10px;
 text-decoration: none;
+}
+
+.numArticulos{
+    position: absolute;
+    top: -2rem;
+    left: 3rem;
+    background-color: rgb(135 37 81);
+    color: #fff;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    padding:4px;
+    line-height: 1.2;
+    text-align: center;
+
 }

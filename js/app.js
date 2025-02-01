@@ -1,21 +1,30 @@
+const body = document.querySelector("body");
 const carrito = document.querySelector("#carrito");
 const contenedorCarrito = document.querySelector("#lista-carrito tbody");
 const vaciarCarritoBtn = document.querySelector("#vaciar-carrito");
 const listaCursos = document.querySelector("#lista-cursos");
+const cantidadArticulos = document.querySelector("#numArticulos");
 let articulosCarrito = [];
 
 cargarEventListener();
 
 function cargarEventListener() {
   listaCursos.addEventListener("click", agregarCurso);
+  document
+    .querySelector("#img-carrito")
+    .addEventListener("click", mostrarOcultarCarrito);
+
+  contenedorCarrito.addEventListener("click", eliminarCurso);
+  vaciarCarritoBtn.addEventListener("click", vaciarCarrito);
 }
+
+/* Mis funciones */
 
 function agregarCurso(e) {
   e.preventDefault();
   if (e.target.classList.contains("agregar-carrito")) {
     let curso = e.target.closest(".card");
     leerCurso(curso);
-  /*   carrito.classList.add("mostrar") */
   }
 }
 
@@ -50,6 +59,7 @@ function leerCurso(curso) {
   }
 
   carritoHtml();
+  numeroArticulos();
 }
 
 function carritoHtml() {
@@ -73,4 +83,40 @@ function limpiarHtml() {
   while (contenedorCarrito.firstChild) {
     contenedorCarrito.removeChild(contenedorCarrito.firstChild);
   }
+}
+
+function numeroArticulos() {
+  cantidadArticulos.textContent = articulosCarrito.length;
+}
+
+function mostrarOcultarCarrito() {
+  carrito.classList.toggle("mostrarCarrito");
+}
+
+function eliminarCurso(e) {
+  if (e.target.classList.contains("borrar-curso")) {
+    let idCurso = e.target.getAttribute("data-id");
+    let curso = e.target.closest("tr");
+    let cantidad = curso.querySelectorAll("td")[3].textContent;
+
+    if (cantidad > 1) {
+      articulosCarrito = articulosCarrito.map((curso) => {
+        return { ...curso, cantidad: curso.cantidad - 1 };
+      });
+    } else {
+      articulosCarrito = articulosCarrito.filter(
+        (curso) => curso.id !== idCurso
+      );
+    }
+
+    carritoHtml();
+    numeroArticulos()
+  }
+}
+
+function vaciarCarrito() {
+  articulosCarrito = [];
+  carritoHtml();
+  numeroArticulos();
+  mostrarOcultarCarrito();
 }
